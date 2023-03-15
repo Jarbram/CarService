@@ -22,7 +22,7 @@ const Login = ({ setUser }) => {
 
   return (
     <div> 
-        <h2>Iniciar sesión</h2>
+        
         <form onSubmit={handleSubmit}>
           {error && <div className="error">{error}</    div>}
           <div>

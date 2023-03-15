@@ -1,57 +1,95 @@
 import './signUp.css'
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useState } from "react";
+import axios from "axios";
 
-const Signup = () => {
+const SignUp = () => {
   const [user, setUser] = useState({
-    email: '',
-    password: '',
-    first_name: '',
-    last_name: '',
+    email: "",
+    password: "",
+    first_name: "",
+    last_name: "",
   });
+  const [error, setError] = useState(null);
 
-  const handleInputChange = (e) => {
-    setUser({
-      ...user,
-      [e.target.name]: e.target.value,
-    });
+  const handleChange = (e) => {
+    setUser({ ...user, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    axios.post('/api/signup', user)
-      .then((res) => {
-        console.log(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
+    try {
+      const response = await axios.post("/api/signup", user);
+      console.log(response);
+      setUser({
+        email: "",
+        password: "",
+        first_name: "",
+        last_name: "",
       });
+    } catch (err) {
+      setError("hubo un problema no se que es pero es un problema");
+      console.error(error);;
+    }
   };
 
   return (
-    <div>
-      <h2>Signup</h2>
+    <div className="container">
       <form onSubmit={handleSubmit}>
-        <div>
-          <label>Email</label>
-          <input type="email" name="email" value={user.email} onChange={handleInputChange} />
+        <div className="form-group">
+          <label htmlFor="email">Email address</label>
+          <input
+            type="email"
+            className="form-control"
+            id="email"
+            name="email"
+            value={user.email}
+            onChange={handleChange}
+            required
+          />
         </div>
-        <div>
-          <label>Password</label>
-          <input type="password" name="password" value={user.password} onChange={handleInputChange} />
+        <div className="form-group">
+          <label htmlFor="password">Password</label>
+          <input
+            type="password"
+            className="form-control"
+            id="password"
+            name="password"
+            value={user.password}
+            onChange={handleChange}
+            required
+          />
         </div>
-        <div>
-          <label>First Name</label>
-          <input type="text" name="first_name" value={user.first_name} onChange={handleInputChange} />
+        <div className="form-group">
+          <label htmlFor="first_name">First Name</label>
+          <input
+            type="text"
+            className="form-control"
+            id="first_name"
+            name="first_name"
+            value={user.first_name}
+            onChange={handleChange}
+            required
+          />
         </div>
-        <div>
-          <label>Last Name</label>
-          <input type="text" name="last_name" value={user.last_name} onChange={handleInputChange} />
+        <div className="form-group">
+          <label htmlFor="last_name">Last Name</label>
+          <input
+            type="text"
+            className="form-control"
+            id="last_name"
+            name="last_name"
+            value={user.last_name}
+            onChange={handleChange}
+            required
+          />
         </div>
-        <button type="submit">Sign up</button>
+        {error && <div className="alert alert-danger">{error}</div>}
+        <button type="submit" className="btn btn-primary">
+          Sign Up
+        </button>
       </form>
     </div>
   );
 };
 
-export default Signup;
+export default SignUp;
