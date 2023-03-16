@@ -12,7 +12,7 @@ const Login = ({ setUser }) => {
     event.preventDefault();
 
     try {
-      const response = await axios.post("/api/login", { email, password });
+      const response = await axios.post("http://localhost:3000/login", { email, password });
       setUser(response.data);
     } catch (error) {
       setError("Email o contraseña incorrectos");

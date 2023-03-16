@@ -11,13 +11,13 @@ func SetupRoutes(router *gin.Engine) {
 
 	router.Use(cors.Default())
 
-	router.POST("/api/signup", controllers.Signup)
-	router.POST("/api/login", controllers.Login)
+	router.POST("/signup", controllers.Signup)
+	router.POST("login", controllers.Login)
 
-	router.GET("/api/users", controllers.GetAllUsers)
-	router.GET("/api/users/:id", controllers.GetUserByID)
-	router.POST("/api/users", controllers.CreateUser)
-	router.PUT("/api/users/:id", controllers.UpdateUser)
-	router.DELETE("/api/users/:id", controllers.DeleteUser)
+	router.GET("/users", controllers.GetAllUsers)
+	router.GET("/users/:id", controllers.GetUserByID)
+	router.POST("/users", controllers.CreateUser)
+	router.PUT("/users/:id", controllers.UpdateUser)
+	router.DELETE("/users/:id", controllers.DeleteUser)
 
 }
