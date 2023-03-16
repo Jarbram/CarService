@@ -21,29 +21,29 @@ const Login = ({ setUser }) => {
   };
 
   return (
-    <div> 
-        
-        <form onSubmit={handleSubmit}>
-          {error && <div className="error">{error}</    div>}
-          <div>
-            <label htmlFor="email">Email</label>
+    <div className='container'> 
+        <form className='form-login' onSubmit={handleSubmit}>
+          {error && <div className="error">{error}</div>}
+          <h2 className='title-login'>Iniciar sesión</h2>
+          <div className='email-container'>
             <input
               type="email"
               id="email"
+              placeholder='Email'
               value={email}
               onChange={(event) => setEmail(event.  target.value)}
             />
           </div>
-          <div>
-            <label htmlFor="password">Contraseña</  label>
+          <div className='password-container'>
             <input
               type="password"
               id="password"
+              placeholder='Password'
               value={password}
               onChange={(event) => setPassword(event.   target.value)}
             />
           </div>
-          <button type="submit">Iniciar sesión</    button>
+          <button className='btn' type="submit">Iniciar sesión</button>
         </form>
     </div>
   );

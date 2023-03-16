@@ -38,9 +38,9 @@ const SignUp = () => {
 
   return (
     <div className="container">
-      <form onSubmit={handleSubmit}>
+      <form className='form-signUp' onSubmit={handleSubmit}>
+      <h2 className='signUp-title'>Registrarse</h2>
         <div className="form-group">
-          <label htmlFor="email">Email address</label>
           <input
             type="email"
             maxLength="50"
@@ -50,11 +50,10 @@ const SignUp = () => {
             value={user.email}
             onChange={handleChange}
             required
-            placeholder="example@gmail.com"
+            placeholder="Email"
           />
         </div>
         <div className="form-group">
-          <label htmlFor="password">Password</label>
           <input
             type="password"
             minLength="8"
@@ -65,11 +64,10 @@ const SignUp = () => {
             value={user.password}
             onChange={handleChange}
             required
-            placeholder="Your password"
+            placeholder="Password"
           />
         </div>
         <div className="form-group">
-          <label htmlFor="first_name">First Name</label>
           <input
             type="text"
             maxLength="25"
@@ -83,7 +81,6 @@ const SignUp = () => {
           />
         </div>
         <div className="form-group">
-          <label htmlFor="last_name">Last Name</label>
           <input
             type="text"
             maxLength="25"
@@ -97,7 +94,7 @@ const SignUp = () => {
           />
         </div>
         {error && <div className="alert alert-danger">{error}</div>}
-        <button type="submit" className="btn btn-primary" disabled={disabled}>
+        <button  type="submit" className="btn" disabled={disabled}>
           Sign Up
         </button>
       </form>
