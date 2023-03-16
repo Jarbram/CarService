@@ -18,13 +18,13 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 400px;
+    width: 350px;
     height: 450px;
     border-radius: 10px;
     background-color: #000000a7;
 }
 .form-login:hover{
-    box-shadow: 0 0 10px rgba(50, 49, 49, 0.8);
+    box-shadow: 0 0 10px rgba(105, 104, 104, 0.8);
 }
 
 .email-container{
@@ -79,3 +79,10 @@ input::placeholder{
     color: var(--color-bg);
     border-color: transparent;
 }
+
+@media screen and (min-width:1024px) {
+    .form-signUp{
+      width: 400px;
+      height: 450px;
+    }
+  }
