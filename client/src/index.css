@@ -11,8 +11,8 @@ text-decoration: none;
 }
 
 :root{
---color-bg:#1f1f38;
---color-bg-variant: #2c2c6c;
+--color-bg:#c9f0f3e3;
+--color-bg-variant: #000000a7;
 --color-primary: #4db5ff;
 --color-primary-variant: rgba(77,181,255,0.4);
 --color-white:#fff;
@@ -32,9 +32,7 @@ html{
   
   body{
   font-family: 'Poppins', sans-serif;
-  background: var(--color-bg);
-  color: var(--color-white);
-  line-height: 1.7;
+  background-color: var(--color-bg);
   }
   
   /***************General Styles***************/

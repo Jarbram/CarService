@@ -4,7 +4,7 @@
     align-items: center;
     height: 100vh;
     width: 100vw;
-    background-color: #437579e3;
+    background-color: var(--color-bg);
 }
 .title-login{
     font-size: 2rem;
@@ -21,7 +21,7 @@
     width: 350px;
     height: 450px;
     border-radius: 10px;
-    background-color: #000000a7;
+    background-color: var(--color-bg-variant);
 }
 .form-login:hover{
     box-shadow: 0 0 10px rgba(105, 104, 104, 0.8);
@@ -67,11 +67,11 @@ input::placeholder{
     height: 50px;
     font-size: 0.9rem;
     display: inline-block;
-    color: #f6f6f6;
+    color: var(--color-white);
     padding:0.75rem 1.2rem;
     border-radius:0.4rem;
     cursor: pointer;
-    background-color: #437579e3;
+    background-color: var(--color-bg);
 }
     
 .btn:hover{
