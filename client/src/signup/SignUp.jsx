@@ -1,6 +1,7 @@
 import './signUp.css'
 import React, { useState, useMemo } from "react";
 import axios from "axios";
+import Navbar from '../components/navbar/Navbar.jsx'
 
 const SignUp = () => {
   const [user, setUser] = useState({
@@ -37,6 +38,8 @@ const SignUp = () => {
   }, [user.email, user.first_name, user.last_name, user.password]);
 
   return (
+    <>
+    <Navbar />
     <div className="container">
       <form className='form-signUp' onSubmit={handleSubmit}>
       <h2 className='signUp-title'>Registrarse</h2>
@@ -99,6 +102,7 @@ const SignUp = () => {
         </button>
       </form>
     </div>
+    </>
   );
 };
 

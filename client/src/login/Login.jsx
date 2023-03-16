@@ -2,6 +2,7 @@
 import './login.css'
 import React, { useState } from "react";
 import axios from "axios";
+import Navbar from '../components/navbar/Navbar.jsx'
 
 const Login = ({ setUser }) => {
   const [email, setEmail] = useState("");
@@ -21,6 +22,8 @@ const Login = ({ setUser }) => {
   };
 
   return (
+    <>
+    <Navbar />
     <div className='container'> 
         <form className='form-login' onSubmit={handleSubmit}>
           {error && <div className="error">{error}</div>}
@@ -46,6 +49,7 @@ const Login = ({ setUser }) => {
           <button className='btn' type="submit">Iniciar sesión</button>
         </form>
     </div>
+    </>
   );
 };
 

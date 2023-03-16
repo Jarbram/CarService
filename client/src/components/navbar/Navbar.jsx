@@ -12,7 +12,7 @@ const Navbar = () => {
 
   return (
     <nav className='container-navbar'>
-      <h1 className='navbar-title'>Jarbram</h1>
+      <h1 className='navbar-title'><Link to ="/">Jarbram</Link></h1>
       <div className='btn-loginSignup'>
         <Link to='/login'>
           <button className='btn-login'>Login</button>
