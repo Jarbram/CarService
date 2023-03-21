@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { FaHamburger } from 'react-icons/fa';
+import { AiFillCar} from 'react-icons/ai';
 import './navbar.css';
 
 const Navbar = () => {
@@ -33,7 +33,7 @@ const Navbar = () => {
         </li>
       </ul>
       <div className='hamburger' onClick={handleMenuClick}>
-        <FaHamburger />
+        <AiFillCar />
       </div>
     </nav>
   );

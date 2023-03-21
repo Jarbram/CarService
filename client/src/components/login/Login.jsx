@@ -2,7 +2,7 @@
 import './login.css'
 import React, { useState } from "react";
 import axios from "axios";
-import Navbar from '../components/navbar/Navbar.jsx'
+import Navbar from '../navbar/Navbar.jsx'
 
 const Login = ({ setUser }) => {
   const [email, setEmail] = useState("");

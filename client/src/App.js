@@ -1,7 +1,7 @@
 import { Switch, Route } from 'react-router-dom';
-import Login from './login/Login.jsx';
-import SignUp from './signup/SignUp.jsx';
-import Home from "./home/Home.jsx";
+import Login from './components/login/Login.jsx';
+import SignUp from './components/signup/SignUp.jsx';
+import Home from './pages/home/Home.jsx';
 
 
 function App() {
