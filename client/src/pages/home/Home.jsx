@@ -1,7 +1,6 @@
 import React, {useState, useEffect } from 'react'
 import Navbar from '../../components/navbar/Navbar.jsx'
-import {images} from '../../data.js'
-
+import {images} from '../../assets/data.js'
 import './home.css'
 
 const Home = () => {
@@ -33,10 +32,10 @@ const Home = () => {
           <p className='home-description'>Take care of your car with our maintenance service for safe and worry-free driving. Quality and attention to detail guaranteed.</p>
         </div>
         <div>
-      <button onClick={handlePrevClick}>Prev</button>
-      <button onClick={handleNextClick}>Next</button>
-      <img src={imageSrc} alt={`Images ${currentIndex + 1}`} />
-    </div>
+        <button onClick={handlePrevClick}>Prev</button>
+        <button onClick={handleNextClick}>Next</button>
+        <img src={require(`../../assets/${imageSrc}`).default} alt={`Image ${currentIndex + 1}`} />
+      </div>
         </div>
     </>
   )
