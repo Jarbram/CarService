@@ -1,8 +1,9 @@
 .slider {
   position: relative;
-  width: 100%;
-  height: 400px;
+  width: 400px;
+  height: 380px;
   overflow: hidden;
+  border-radius: 2rem;
 }
 
 .slider-img {
@@ -60,4 +61,11 @@
 
 .slider-nav-next {
   border-radius: 4px 0 0 4px;
+}
+
+
+@media screen and (min-width: 630px) {
+  .slider {
+    width: 700px;
+  }
 }
