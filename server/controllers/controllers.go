@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"myapp/models"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
@@ -96,6 +97,15 @@ func Signup(c *gin.Context) {
 		return
 	}
 
+	password_bytes := []byte(user.Password)
+	hashed_password, err := bcrypt.GenerateFromPassword(password_bytes, bcrypt.DefaultCost)
+	if err != nil {
+		c.JSON(500, gin.H{"error": err.Error()})
+		return
+	}
+	user.Password = string(hashed_password)
+
+	// Crear nuevo usuario en la base de datos
 	if err := models.DB.Create(&user).Error; err != nil {
 		c.JSON(500, gin.H{"error": err.Error()})
 		return
@@ -106,22 +116,26 @@ func Signup(c *gin.Context) {
 
 // Controlador para el inicio de sesión de un usuario existente
 func Login(c *gin.Context) {
+	var req struct {
+		Email    string `json:"email" binding:"required,email"`
+		Password string `json:"password" binding:"required"`
+	}
+
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
 	var user models.User
-	if err := c.ShouldBindJSON(&user); err != nil {
-		c.JSON(400, gin.H{"error": err.Error()})
+	if err := models.DB.Where("email = ?", req.Email).First(&user).Error; err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Email o contraseña incorrectos. Por favor, inténtelo de nuevo."})
 		return
 	}
 
-	if err := models.DB.Where("email = ?", user.Email).First(&user).Error; err != nil {
-		c.JSON(401, gin.H{"error": "Invalid email or password"})
+	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(req.Password)); err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Email o contraseña incorrectos. Por favor, inténtelo de nuevo."})
 		return
 	}
 
-	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(user.Password)); err != nil {
-		c.JSON(401, gin.H{"error": "Invalid email or password"})
-		return
-	}
-
-	// Aquí puedes agregar la lógica para generar y enviar un token de autenticación al cliente
-	c.JSON(200, gin.H{"message": "User logged in successfully"})
+	c.JSON(http.StatusOK, gin.H{"user": user})
 }

@@ -12,7 +12,7 @@ func SetupRoutes(router *gin.Engine) {
 	router.Use(cors.Default())
 
 	router.POST("/signup", controllers.Signup)
-	router.POST("login", controllers.Login)
+	router.POST("/login", controllers.Login)
 
 	router.GET("/users", controllers.GetAllUsers)
 	router.GET("/users/:id", controllers.GetUserByID)

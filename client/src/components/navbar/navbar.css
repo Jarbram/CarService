@@ -12,10 +12,21 @@ li, a, button {
     height: 5rem;
     background-color: var(--color-bg-variant);
   }
-  
+
+  .navbar-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--color-white);
+    cursor: pointer;
+  }
+
+  .navbar-title:hover {
+    color: var(--color-bg);
+  }
+
   .navigation {
     display: none;
-    margin-top: 60px; /* Separo un poco la navegación del resto */
+    margin-top: 60px; 
   }
   
   .navigation.open {
