@@ -120,5 +120,13 @@ li, a, button {
     .hamburger:hover {
       color: var(--color-bg);
     }
+
+    .btn-login  {
+      padding: 0.2rem 1rem;
+    }
+
+    .btn-signUp {
+      padding: 0.2rem 1rem;
+    }
   }
   

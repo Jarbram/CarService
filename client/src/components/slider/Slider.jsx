@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './Slider.css';
+import {AiFillCaretRight, AiFillCaretLeft} from 'react-icons/ai';
 
 const Slider = () => {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -43,12 +44,8 @@ const Slider = () => {
       <img className="slider-img" src={slideItems[activeIndex].imgUrl} alt={slideItems[activeIndex].alt} />
       <div className="slider-description">{slideItems[activeIndex].description}</div>
       <div className="slider-nav">
-        <button className="slider-nav-btn slider-nav-prev" onClick={handlePrevClick}>
-          Prev
-        </button>
-        <button className="slider-nav-btn slider-nav-next" onClick={handleNextClick}>
-          Next
-        </button>
+        <AiFillCaretLeft className="slider-nav-btn slider-nav-prev" onClick={handlePrevClick} />
+        <AiFillCaretRight className="slider-nav-btn slider-nav-next" onClick={handleNextClick} />
       </div>
     </div>
   );

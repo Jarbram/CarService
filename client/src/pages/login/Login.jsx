@@ -1,13 +1,21 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import axios from 'axios';
-import Navbar from '../navbar/Navbar';
+import Navbar from '../../components/navbar/Navbar';
 import './login.css';
+import {BiShow} from 'react-icons/bi';
 
 const Login = () => {
+  const [showPassword, setShowPassword] = useState(false);
   const [user, setUser] = useState({
     email: "",
     password: "",
   });
+
+
+  const handleShowPassword = () => {
+    setShowPassword((prevState) => !prevState);
+  }
+
   const [error, setError] = useState(null);
 
   const handleChange = (e) => {
@@ -66,7 +74,7 @@ const Login = () => {
           </div>
           <div className='password-container'>
             <input
-              type='password'
+              type={showPassword ? 'text' : 'password'}
               id='password'
               name='password'
               placeholder='Contraseña'
@@ -74,6 +82,7 @@ const Login = () => {
               onChange={handleChange}
               required
             />
+            <BiShow className='show-password' onClick={handleShowPassword} />
           </div>
           <button  type="submit" className="btn" disabled={disabled}>
             Iniciar sesión

@@ -53,13 +53,29 @@ input::placeholder{
 
 .password-container{
     display: flex;
-    justify-content: center;
-    flex-direction: column;
+    justify-content: space-between;
+    padding: 0 1rem;
     align-items: center;
     width: 100%;
     height: 50px;
-    border-radius: 10px;
     margin-bottom: 2rem;
+}
+
+.password-container input{
+    width: 90%;
+}
+
+.show-password{
+    font-size: 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    color: #ffffff;
+}
+
+.show-password:hover{
+    color: var(--color-bg);
 }
 
 .btn {
