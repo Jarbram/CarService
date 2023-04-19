@@ -3,6 +3,7 @@ import axios from 'axios';
 import Navbar from '../../components/navbar/Navbar';
 import './login.css';
 import {BiShow} from 'react-icons/bi';
+import { useHistory } from 'react-router-dom';
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -10,14 +11,12 @@ const Login = () => {
     email: "",
     password: "",
   });
-
+  const [error, setError] = useState(null);
+  const history = useHistory();
 
   const handleShowPassword = () => {
     setShowPassword((prevState) => !prevState);
   }
-
-  const [error, setError] = useState(null);
-
   const handleChange = (e) => {
     setUser({ ...user, [e.target.name]: e.target.value });
   };
@@ -32,6 +31,7 @@ const Login = () => {
         password: "",
       });
       setError(null);
+      history.push('/home');
     } catch (error) {
       setError(handleErrorResponse(error));
     }
@@ -56,28 +56,29 @@ const Login = () => {
 
   return (
     <>
-      <Navbar />
+      <Navbar isSignUpVisible={true}/>
       <div className='container'>
         <form className='form-login' onSubmit={handleLogin}>
           {error && <div className='error'>{error}</div>}
           <h2 className='title-login'>Iniciar sesión</h2>
+
+          <label>Email</label>
           <div className='email-container'>
             <input
               type='email'
               id='email'
               name='email'
-              placeholder='Email'
               value={user.email}
               onChange={handleChange}
               required
             />
           </div>
+          <label>Password</label>
           <div className='password-container'>
             <input
               type={showPassword ? 'text' : 'password'}
               id='password'
               name='password'
-              placeholder='Contraseña'
               value={user.password}
               onChange={handleChange}
               required

@@ -2,6 +2,7 @@ import './signUp.css'
 import React, { useState, useMemo } from "react";
 import axios from "axios";
 import Navbar from "../../components/navbar/Navbar";
+import { useHistory } from "react-router-dom";
 
 const SignUp = () => {
   const [user, setUser] = useState({
@@ -11,6 +12,7 @@ const SignUp = () => {
     last_name: "",
   });
   const [error, setError] = useState(null);
+  const history = useHistory();
 
   const handleChange = (e) => {
     setUser({ ...user, [e.target.name]: e.target.value });
@@ -27,6 +29,7 @@ const SignUp = () => {
         first_name: "",
         last_name: "",
       });
+      history.push("/login");
     } catch (err) {
       console.error(err);
       setError("Hubo un problema: " + err.message);
@@ -39,11 +42,12 @@ const SignUp = () => {
 
   return (
     <>
-    <Navbar />
+    <Navbar isLoginVisible={true} />
     <div className="container">
       <form className='form-signUp' onSubmit={handleSubmit}>
       <h2 className='signUp-title'>Registrarse</h2>
         <div className="form-group">
+        <label>Email</label>
           <input
             type="email"
             maxLength="50"
@@ -53,10 +57,10 @@ const SignUp = () => {
             value={user.email}
             onChange={handleChange}
             required
-            placeholder="Email"
           />
         </div>
         <div className="form-group">
+          <label>Password</label>
           <input
             type="password"
             minLength="8"
@@ -67,10 +71,10 @@ const SignUp = () => {
             value={user.password}
             onChange={handleChange}
             required
-            placeholder="Password"
           />
         </div>
         <div className="form-group">
+          <label>First Name</label>
           <input
             type="text"
             maxLength="25"
@@ -80,10 +84,10 @@ const SignUp = () => {
             value={user.first_name}
             onChange={handleChange}
             required
-            placeholder="Your first name"
           />
         </div>
         <div className="form-group">
+          <label>Last Name</label>
           <input
             type="text"
             maxLength="25"
@@ -93,7 +97,6 @@ const SignUp = () => {
             value={user.last_name}
             onChange={handleChange}
             required
-            placeholder="Your last name"
           />
         </div>
         {error && <div className="alert alert-danger">{error}</div>}
