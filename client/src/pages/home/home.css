@@ -5,6 +5,13 @@
     height: 100vh;
     width: 100vw;
 }
+.home-title{
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
 .about{
     display: flex;
     flex-direction: column;
@@ -13,9 +20,18 @@
     height: 400px;
     width: 350px;
 }
-.home-title{
-    font-size: 2rem;
-    font-weight: 600;
+
+.spareParts{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 400px;
+    width:auto;
+}
+.spareParts p{
+    font-size: 1.2rem;
+    font-weight: 400;
     margin-bottom: 20px;
     text-align: center;
 }

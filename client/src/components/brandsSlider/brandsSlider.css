@@ -1,0 +1,36 @@
+
+  :root {
+    --animation-speed: 40s;
+  }
+  
+  @keyframes scroll {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(calc(-250px * 7));
+    }
+  }
+  
+  .slider-brands {
+    height: 140px;
+    margin: auto;
+    overflow: hidden;
+    position: relative;
+    width: auto;
+    margin-bottom: 40px;
+  }
+  
+  .slider-brands .slide-track {
+    animation: scroll var(--animation-speed) linear infinite;
+    display: flex;
+    width: calc(250px * 14);
+  }
+  
+  .slider-brands .slide {
+    font-size: 7rem;
+    height: auto;
+    width: 250px;
+    color:var(--color-bg-variant);
+  }
+  
