@@ -142,7 +142,7 @@ func Login(c *gin.Context) {
 
 // Controlador para obtener todas las noticias
 func GetAllNoticias(c *gin.Context) {
-	var noticias []models.Noticia
+	var noticias []models.Noticias
 	if err := models.DB.Find(&noticias).Error; err != nil {
 		c.JSON(500, gin.H{"error": err.Error()})
 		return
@@ -153,7 +153,7 @@ func GetAllNoticias(c *gin.Context) {
 
 // Controlador para obtener una noticia por ID
 func GetNoticiasByID(c *gin.Context) {
-	var noticias models.Noticia
+	var noticias models.Noticias
 	id := c.Param("id")
 
 	if err := models.DB.First(&noticias, id).Error; err != nil {

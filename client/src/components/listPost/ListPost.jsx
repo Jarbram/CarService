@@ -1,47 +1,37 @@
-import axios from 'axios';
-import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
 
-
-// Función para realizar la solicitud HTTP y actualizar el estado de noticias
-async function obtenerNoticias(setNoticias) {
-  try {
-    const respuesta = await axios.get('http://localhost:3000/noticias');
-    setNoticias(respuesta.data);
-  } catch (error) {
-    console.log(error);
-  }
-}
-
-function ListPost() {
+const ListPost = () => {
   const [noticias, setNoticias] = useState([]);
 
-  // useEffect se utiliza para realizar la solicitud HTTP una vez que el componente se ha montado
-  useEffect(() => {
-    obtenerNoticias(setNoticias);
-  }, []);
+  const getNoticias = async () => {
+    try {
+      const response = await fetch('http://localhost:3000/noticias');
+      const data = await response.json();
+      setNoticias(data.data);
+      console.log(data.data);
+    } catch (error) {
+      console.log('Hubo un error en la petición fetch:', error.message);
+    }
+  }
 
-  // Renderiza la lista de noticias
+  useEffect(() => {
+    getNoticias();
+  }, [])
+
   return (
     <div>
-      {noticias.length > 0 ? (
-        noticias.map(noticia => {
-          return (
-            <Link to={`/noticias/${noticia.id}`} key={noticia.id}>
-              <article>
-                <h3>{noticia.titulo}</h3>
-                <p>{noticia.autor}</p>
-              </article>
-            </Link>
-          )
-        })
-      ) : (
-        <p>No hay noticias disponibles</p>
-      )}
+    {
+      noticias.map(noticia => (
+      <div key={noticia.id}>
+        <h2>{noticia.titulo}</h2>
+        <p>{noticia.fecha_publicacion}</p>
+        <p>{noticia.autor}</p>
+        <p>{noticia.contenido}</p>
+      </div>
+    ))
+  }
     </div>
-  );
+  )
 }
 
 export default ListPost;
-
-
