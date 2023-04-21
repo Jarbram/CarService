@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import './listPost.css';
+
 
 const ListPost = () => {
   const [noticias, setNoticias] = useState([]);
@@ -19,16 +22,25 @@ const ListPost = () => {
   }, [])
 
   return (
-    <div>
+    <div className='post-container'>
     {
-      noticias.map(noticia => (
-      <div key={noticia.id}>
-        <h2>{noticia.titulo}</h2>
-        <p>{noticia.fecha_publicacion}</p>
-        <p>{noticia.autor}</p>
-        <p>{noticia.contenido}</p>
-      </div>
-    ))
+      noticias.map(noticia => {
+        const { id, titulo, fecha_publicacion, autor} =noticia;
+        return <Link to={`/noticias/${id}`} className='post-container-card' 
+        key={id}>
+        <article >
+          <h3 className='post-card_title' >
+          {titulo}
+          </h3> 
+          <p>
+          {fecha_publicacion}
+          </p>
+          <p>
+          {autor}
+          </p>      
+        </article>
+      </Link>
+      })
   }
     </div>
   )
