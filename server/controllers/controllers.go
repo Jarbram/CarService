@@ -153,7 +153,7 @@ func GetAllNoticias(c *gin.Context) {
 
 // Controlador para obtener una noticia por ID
 func GetNoticiasByID(c *gin.Context) {
-	var noticias models.Noticias
+	var noticias []models.Noticias
 	id := c.Param("id")
 
 	if err := models.DB.First(&noticias, id).Error; err != nil {

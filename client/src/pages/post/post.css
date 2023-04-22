@@ -1,0 +1,27 @@
+.news-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    width: 100%;
+    max-width: 1000px;
+    padding: 0 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.news-container h3{
+    text-align: center;
+}
+
+.news-container img{
+    width: 100%;
+    height: auto;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+.news-contenido{
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
