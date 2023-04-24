@@ -1,40 +1,45 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useReducer, useEffect, useMemo } from 'react';
 import axios from 'axios';
 import Navbar from '../../components/navbar/Navbar';
 import './login.css';
 import {BiShow} from 'react-icons/bi';
 import { useHistory } from 'react-router-dom';
 
-const Login = () => {
-  const [showPassword, setShowPassword] = useState(false);
-  const [user, setUser] = useState({
+const initialState = {
+  showPassword:false,
+  user: {
     email: "",
     password: "",
-  });
-  const [error, setError] = useState(null);
-  const history = useHistory();
+  },
+  error: null,
+};
 
-  const handleShowPassword = () => {
-    setShowPassword((prevState) => !prevState);
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    case 'SET_SHOW_PASSWORD':
+      return { ...state, showPassword: action.payload };
+    case 'SET_USER':
+      return { ...state, user:{...state.user, ...action.payload} };
+    case 'SET_ERROR':
+      return { ...state, error: action.payload };
+    case 'RESET':
+      return initialState;
+    default:
+      throw new Error('Invalid action type');
   }
-  const handleChange = (e) => {
-    setUser({ ...user, [e.target.name]: e.target.value });
+};
+
+const Login = () => {
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const history = useHistory();
+ 
+  const handleShowPassword = () => {
+    dispatch({ type: 'SET_SHOW_PASSWORD', payload: !state.showPassword });
   };
 
-  const handleLogin = async (event) => {
-    event.preventDefault();
-    try {
-      const response = await axios.post('http://localhost:3000/login', user);
-      console.log(response);
-      setUser({
-        email: "",
-        password: "",
-      });
-      setError(null);
-      history.push('/home');
-    } catch (error) {
-      setError(handleErrorResponse(error));
-    }
+  const handleChange = (e) => {
+    dispatch({ type: 'SET_USER', payload: { [e.target.name]: e.target.value } });
   };
 
   const handleErrorResponse = (error) => {
@@ -44,22 +49,34 @@ const Login = () => {
     return 'Ha ocurrido un error. Por favor, inténtelo de nuevo más tarde.';
   };
 
+  const handleLogin = async (event) => {
+    event.preventDefault();
+    try {
+      const response = await axios.post('http://localhost:3000/login', state.user);
+      console.log(response);
+      dispatch({ type: 'RESET' });
+      history.push('/home');
+    } catch (error) {
+      dispatch({ type: 'SET_ERROR', payload: handleErrorResponse(error) });
+    }
+  };
+
   const disabled = useMemo(() => {
-    return !user.email.trim() || !user.password.trim();
-  }, [user.email, user.password]);
+    return !state.user.email.trim() || !state.user.password.trim();
+  }, [state.user.email, state.user.password]);
 
   useEffect(() => {
-    if (error) {
-      console.log(error);
+    if (state.error) {
+      console.log(state.error);
     }
-  }, [error]);
+  }, [state.error]);
 
   return (
     <>
-      <Navbar isSignUpVisible={true}/>
+      <Navbar isSignUpVisible={true} currentPage="home" />
       <div className='container'>
         <form className='form-login' onSubmit={handleLogin}>
-          {error && <div className='error'>{error}</div>}
+          {state.error && <div className='error'>{state.error}</div>}
           <h2 className='title-login'>Iniciar sesión</h2>
 
           <label>Email</label>
@@ -68,7 +85,7 @@ const Login = () => {
               type='email'
               id='email'
               name='email'
-              value={user.email}
+              value={state.user.email}
               onChange={handleChange}
               required
             />
@@ -76,10 +93,10 @@ const Login = () => {
           <label>Password</label>
           <div className='password-container'>
             <input
-              type={showPassword ? 'text' : 'password'}
+              type={state.showPassword ? 'text' : 'password'}
               id='password'
               name='password'
-              value={user.password}
+              value={state.user.password}
               onChange={handleChange}
               required
             />

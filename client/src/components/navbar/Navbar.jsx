@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { AiFillCar } from "react-icons/ai";
 import "./navbar.css";
 
-const Navbar = ({ isLoginVisible, isSignUpVisible, isHamburgerVisible }) => {
+const Navbar = ({ isLoginVisible, isSignUpVisible, isHamburgerVisible,currentPage}) => {
   const [showNav, setShowNav] = useState(false);
 
   const handleMenuClick = () => {
@@ -14,7 +14,7 @@ const Navbar = ({ isLoginVisible, isSignUpVisible, isHamburgerVisible }) => {
     <nav>
       <div className="container-navbar">
         <h1>
-          <Link className="navbar-title" to="/">
+          <Link className="navbar-title" to={`/${currentPage}`}>
             Jarbram
           </Link>
         </h1>

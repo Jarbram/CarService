@@ -1,4 +1,4 @@
-import { Switch, Route } from 'react-router-dom';
+import {BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Login from './/pages/login/Login.jsx';
 import SignUp from './/pages/signup/SignUp.jsx';
 import Home from './/pages/home/Home.jsx';
@@ -8,6 +8,7 @@ import Post from './/pages/post/Post.jsx';
 
 function App() {
   return (
+    <Router>
     <Switch>
       <Route exact path="/" component={Home} />
       <Route path="/login" component={Login} />
@@ -15,6 +16,7 @@ function App() {
       <Route path="/home" component={HomeUser} /> 
       <Route path="/noticias/:id*" component={Post}/>
     </Switch>
+    </Router>
   );
 }
 

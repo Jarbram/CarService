@@ -1,48 +1,61 @@
 import './signUp.css'
-import React, { useState, useMemo } from "react";
+import React, { useReducer, useMemo } from "react";
 import axios from "axios";
 import Navbar from "../../components/navbar/Navbar";
 import { useHistory } from "react-router-dom";
 
+const initialState={
+  email:"",
+  password:"",
+  first_name:"",
+  last_name:"",
+  error:null,
+}
+
+const reducer=(state,action)=>{
+  switch(action.type){
+    case "updateField":
+      return{...state,[action.field]:action.value};
+    case "setError":
+      return{...state,error:action.error};
+    case "reset":
+      return initialState;
+    default:
+      return state;
+  }
+};
+
 const SignUp = () => {
-  const [user, setUser] = useState({
-    email: "",
-    password: "",
-    first_name: "",
-    last_name: "",
-  });
-  const [error, setError] = useState(null);
+  const [state, dispatch] = useReducer(reducer, initialState);
   const history = useHistory();
 
   const handleChange = (e) => {
-    setUser({ ...user, [e.target.name]: e.target.value });
+    dispatch({
+      type: "updateField",
+      field: e.target.name,
+      value: e.target.value,
+    })
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:3000/signup", user);
+      const response = await axios.post("http://localhost:3000/signup", state);
       console.log(response); 
-      setUser({
-        email: "",
-        password: "",
-        first_name: "",
-        last_name: "",
-      });
+      dispatch({ type: "reset" });
       history.push("/login");
     } catch (err) {
       console.error(err);
-      setError("Hubo un problema: " + err.message);
+      dispatch({ type: "setError", error:"Hubo un problema" + err.message });
     }
   };
 
   const disabled = useMemo(() => {
-    return !user.email || !user.first_name || !user.last_name || !user.password;
-  }, [user.email, user.first_name, user.last_name, user.password]);
+    return !state.email || !state.password || !state.first_name || !state.last_name;},[state]);
 
   return (
     <>
-    <Navbar isLoginVisible={true} />
+    <Navbar isLoginVisible={true} currentPage="signup"/>
     <div className="container">
       <form className='form-signUp' onSubmit={handleSubmit}>
       <h2 className='signUp-title'>Registrarse</h2>
@@ -54,7 +67,7 @@ const SignUp = () => {
             className="form-control"
             id="email"
             name="email"
-            value={user.email}
+            value={state.email}
             onChange={handleChange}
             required
           />
@@ -68,7 +81,7 @@ const SignUp = () => {
             className="form-control"
             id="password"
             name="password"
-            value={user.password}
+            value={state.password}
             onChange={handleChange}
             required
           />
@@ -81,7 +94,7 @@ const SignUp = () => {
             className="form-control"
             id="first_name"
             name="first_name"
-            value={user.first_name}
+            value={state.first_name}
             onChange={handleChange}
             required
           />
@@ -94,12 +107,12 @@ const SignUp = () => {
             className="form-control"
             id="last_name"
             name="last_name"
-            value={user.last_name}
+            value={state.last_name}
             onChange={handleChange}
             required
           />
         </div>
-        {error && <div className="alert alert-danger">{error}</div>}
+        {state.error && <div className="alert alert-danger">{state.error}</div>}
         <button  type="submit" className="btn" disabled={disabled}>
           Sign Up
         </button>
