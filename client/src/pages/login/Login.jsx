@@ -5,6 +5,7 @@ import './login.css';
 import {BiShow} from 'react-icons/bi';
 import { useHistory } from 'react-router-dom';
 
+// Initial state for the reducer
 const initialState = {
   showPassword:false,
   user: {
@@ -14,7 +15,7 @@ const initialState = {
   error: null,
 };
 
-
+// Reducer function with the actions for updating the state
 const reducer = (state, action) => {
   switch (action.type) {
     case 'SET_SHOW_PASSWORD':
@@ -29,19 +30,22 @@ const reducer = (state, action) => {
       throw new Error('Invalid action type');
   }
 };
-
+// Principal component for the login page
 const Login = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const history = useHistory();
- 
+
+//  Change the state to show or hide the password
   const handleShowPassword = () => {
     dispatch({ type: 'SET_SHOW_PASSWORD', payload: !state.showPassword });
   };
 
+  //Update the state with the user data when the user types
   const handleChange = (e) => {
     dispatch({ type: 'SET_USER', payload: { [e.target.name]: e.target.value } });
   };
 
+  //Process the errors after the call http
   const handleErrorResponse = (error) => {
     if (error && error.response && error.response.status === 401) {
       return 'Email o contraseña incorrectos. Por favor, inténtelo de nuevo.';
@@ -49,6 +53,7 @@ const Login = () => {
     return 'Ha ocurrido un error. Por favor, inténtelo de nuevo más tarde.';
   };
 
+  //Login if the data its correct
   const handleLogin = async (event) => {
     event.preventDefault();
     try {
@@ -61,6 +66,7 @@ const Login = () => {
     }
   };
 
+  //Disable the button if the user or password are empty
   const disabled = useMemo(() => {
     return !state.user.email.trim() || !state.user.password.trim();
   }, [state.user.email, state.user.password]);
@@ -71,6 +77,8 @@ const Login = () => {
     }
   }, [state.error]);
 
+
+  // render the login form with the state and the actions
   return (
     <>
       <Navbar isSignUpVisible={true} currentPage="home" />

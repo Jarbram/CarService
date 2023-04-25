@@ -1,0 +1,47 @@
+.footer{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: auto;
+}
+.footer p{
+    font-size: 1.2rem;
+    font-weight: 300;
+    margin-top: 60px;
+}
+
+.footer-container{
+    background-color: var(--color-bg-variant);
+    color: #ffffff;
+    width: 100%;
+    height: 150px;
+    margin-top: 70px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+
+
+}
+
+.redes{
+    display: flex;
+    gap: 20px;
+    margin-top: 20px;
+}
+.redes a{
+    cursor: pointer;
+    font-size: 2.5rem;
+    transition: var(--transition);
+}
+.footerLogo{
+   display: flex;
+   align-items: center;
+   gap: 10px;
+   font-size: 2rem;
+}
+.footerLogo h2{
+   font-size: 1.5rem;
+    font-weight: 600;
+}

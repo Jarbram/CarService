@@ -3,6 +3,7 @@ import Navbar from '../../components/navbar/Navbar.jsx'
 import './home.css'
 import Slider from '../../components/slider/Slider.jsx'
 import BrandsSlider from '../../components/brandsSlider/BrandsSlider.jsx';
+import Footer from '../../components/footer/Footer.jsx';
 
 const Home = () => {
   return (
@@ -24,6 +25,7 @@ const Home = () => {
         </div>
       </div>
       <BrandsSlider />
+      <Footer />
     </>
   );
 };

@@ -31,14 +31,11 @@ const Navbar = ({ isLoginVisible, isSignUpVisible, isHamburgerVisible,currentPag
           )}
         </div>
         <ul className={showNav ? "navigation open" : "navigation"}>
-          <li className="navbar-item">
-            <Link to="#services">Services</Link>
+          <li className="navbar-item" >
+            <Link to="/home">Tips</Link>
           </li>
           <li className="navbar-item">
-            <Link to="#projects">Projects</Link>
-          </li>
-          <li className="navbar-item">
-            <Link to="#about">About</Link>
+            <Link to="#carService">My car</Link>
           </li>
         </ul>
         {isHamburgerVisible && (

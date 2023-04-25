@@ -4,6 +4,7 @@ import axios from "axios";
 import Navbar from "../../components/navbar/Navbar";
 import { useHistory } from "react-router-dom";
 
+// Definition the initial state of the form
 const initialState={
   email:"",
   password:"",
@@ -12,6 +13,7 @@ const initialState={
   error:null,
 }
 
+// create the reducer function with the actions for updating the state
 const reducer=(state,action)=>{
   switch(action.type){
     case "updateField":
@@ -26,9 +28,13 @@ const reducer=(state,action)=>{
 };
 
 const SignUp = () => {
+  //use the reducer for handle the state of the form
   const [state, dispatch] = useReducer(reducer, initialState);
+
+  // Get the history object from the react-router-dom
   const history = useHistory();
 
+  // Handle the history of the navigation
   const handleChange = (e) => {
     dispatch({
       type: "updateField",
@@ -37,6 +43,7 @@ const SignUp = () => {
     })
   };
 
+  // Sent the data to the server
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -50,9 +57,11 @@ const SignUp = () => {
     }
   };
 
+  // Disable the button if the fields are empty
   const disabled = useMemo(() => {
     return !state.email || !state.password || !state.first_name || !state.last_name;},[state]);
 
+    // Render the form
   return (
     <>
     <Navbar isLoginVisible={true} currentPage="signup"/>
