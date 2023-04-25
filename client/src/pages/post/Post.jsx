@@ -27,7 +27,7 @@ const Post = () => {
 
   return (
     <div>
-      <Navbar isHamburgerVisible ={true} />
+      <Navbar isHamburgerVisible ={true} currentPage="home" />
       <div className='news-container'>
       {
         noticia.map(news => {
