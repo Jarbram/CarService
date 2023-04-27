@@ -4,6 +4,8 @@ import SignUp from './/pages/signup/SignUp.jsx';
 import Home from './/pages/home/Home.jsx';
 import HomeUser from './/pages/homeUser/HomeUser.jsx';
 import Post from './/pages/post/Post.jsx';
+import Page404 from './pages/404/Page404.jsx';
+
 
 
 function App() {
@@ -15,6 +17,7 @@ function App() {
       <Route path="/signup" component={SignUp} />
       <Route path="/home" component={HomeUser} /> 
       <Route path="/noticias/:id*" component={Post}/>
+      <Route path='*' component={Page404} />
     </Switch>
     </Router>
   );
