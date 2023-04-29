@@ -58,7 +58,8 @@ const Login = () => {
     event.preventDefault();
     try {
       const response = await axios.post('http://localhost:3000/login', state.user);
-      console.log(response);
+      localStorage.setItem('userId', response.data.user.id);
+      console.log(response.data.user.id)
       dispatch({ type: 'RESET' });
       history.push('/home');
     } catch (error) {

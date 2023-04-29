@@ -14,7 +14,6 @@ const Post = () => {
       const response = await fetch(`http://localhost:3000/noticias/${id}`);
       const data = await response.json();
       setNoticia(data.data);
-      console.log(data.data);
     } catch (error) {
       console.log('Hubo un error en la petición fetch:', error.message);
     }

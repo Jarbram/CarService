@@ -17,6 +17,9 @@ func SetupRoutes(router *gin.Engine) {
 	router.GET("/noticias", controllers.GetAllNoticias)
 	router.GET("/noticias/:id", controllers.GetNoticiasByID)
 
+	router.GET("/cars", controllers.GetAllCars)
+	router.GET("/car/:id", controllers.GetCarByID)
+
 	router.GET("/users", controllers.GetAllUsers)
 	router.GET("/users/:id", controllers.GetUserByID)
 	router.POST("/users", controllers.CreateUser)

@@ -21,6 +21,7 @@ const ListPost = () => {
   }, [])
 
   return (
+    <section className='post_box'>
     <div className='post-container'>
     {
       noticias.map(noticia => {
@@ -42,6 +43,7 @@ const ListPost = () => {
       })
   }
     </div>
+    </section>
   )
 }
 
