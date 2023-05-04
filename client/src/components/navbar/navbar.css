@@ -69,7 +69,12 @@ li, a, button {
     text-decoration: none;
     cursor: pointer;
   }
-  
+  .btn-loginSignup{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+  }
   .btn-login {
     padding: 0.5rem 1.5rem;
     background-color: var(--color-bg);
@@ -77,8 +82,9 @@ li, a, button {
     border-radius: 50px;
     color: var(--color-bg-variant);
     cursor: pointer;
-    margin-right: 10px;
   }
+
+
   
   .btn-login:hover {
     background-color: var(--color-white);
@@ -95,6 +101,19 @@ li, a, button {
   }
   
   .btn-signUp:hover {
+    background-color: var(--color-white);
+  }
+
+  .btn-colaboradores{
+    padding: 0.5rem 1.5rem;
+    background-color: var(--color-bg);
+    border: none;
+    border-radius: 50px;
+    color: var(--color-bg-variant);
+    cursor: pointer;
+    transition: all 0.3s ease 0s;
+  }
+  .btn-colaboradores:hover{
     background-color: var(--color-white);
   }
   
@@ -126,6 +145,9 @@ li, a, button {
     }
 
     .btn-signUp {
+      padding: 0.2rem 1rem;
+    }
+    .btn-colaboradores{
       padding: 0.2rem 1rem;
     }
   }

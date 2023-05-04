@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { AiFillCar } from "react-icons/ai";
 import "./navbar.css";
 
-const Navbar = ({ isLoginVisible, isSignUpVisible, isHamburgerVisible,currentPage}) => {
+const Navbar = ({ isLoginVisible, isSignUpVisible, isHamburgerVisible,isColaboradoresVisible, currentPage}) => {
   const [showNav, setShowNav] = useState(false);
 
   const handleMenuClick = () => {
@@ -19,6 +19,11 @@ const Navbar = ({ isLoginVisible, isSignUpVisible, isHamburgerVisible,currentPag
           </Link>
         </h1>
         <div className="btn-loginSignup">
+        {isColaboradoresVisible && (
+          <Link to="/loginTeam">
+            <button className="btn-colaboradores">Team</button>
+            </Link>
+        )}
           {isLoginVisible && (
             <Link to="/login">
               <button className="btn-login">Login</button>

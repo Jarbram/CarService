@@ -140,6 +140,32 @@ func Login(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"user": user})
 }
 
+// Controlador para inicio de sesión de colaboradores
+func LoginTeam(c *gin.Context) {
+	var req struct {
+		Email    string `json:"email" binding:"required,email"`
+		Password string `json:"password" binding:"required"`
+	}
+
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	var team models.Team
+	if err := models.DB.Where("email = ?", req.Email).First(&team).Error; err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Email o contraseña incorrectos. Por favor, inténtelo de nuevo."})
+		return
+	}
+
+	if err := bcrypt.CompareHashAndPassword([]byte(team.Password), []byte(req.Password)); err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Email o contraseña incorrectos. Por favor, inténtelo de nuevo."})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"team": team})
+}
+
 // Controlador para obtener todas las noticias
 func GetAllNoticias(c *gin.Context) {
 	var noticias []models.Noticias

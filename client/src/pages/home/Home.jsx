@@ -11,6 +11,7 @@ const Home = () => {
       <Navbar 
       isLoginVisible={true}
       isSignUpVisible={true}
+      isColaboradoresVisible={true}
       />
       <div className="home-container">
         <div className="about">
