@@ -64,7 +64,7 @@ const SignUp = () => {
     // Render the form
   return (
     <>
-    <Navbar isLoginVisible={true} currentPage="signup"/>
+    <Navbar isLoginVisible={true} currentPage=""/>
     <div className="container">
       <form className='form-signUp' onSubmit={handleSubmit}>
       <h2 className='signUp-title'>Registrarse</h2>

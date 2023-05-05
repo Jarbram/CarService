@@ -1,0 +1,18 @@
+.user-container-card{
+    display:flex;
+    flex-direction:column;
+    padding: 20px;
+    width: 340px;
+    min-width: 280px;
+    margin-bottom: 20px;
+    border: 2px solid #e8fff8;
+    border-radius: 25px;
+    background-color: var(--color-bg-variant);
+}
+.user-container-card-div{
+    display:flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-bottom: 10px;
+    border-bottom: 2px solid #e8fff8;
+}

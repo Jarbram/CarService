@@ -7,7 +7,7 @@ import { useHistory } from 'react-router-dom';
 // Initial state for the reducer
 const initialState = {
   showPassword:false,
-  user: {
+  team: {
     email: "",
     password: "",
   },
@@ -19,8 +19,8 @@ const reducer = (state, action) => {
   switch (action.type) {
     case 'SET_SHOW_PASSWORD':
       return { ...state, showPassword: action.payload };
-    case 'SET_USER':
-      return { ...state, user:{...state.user, ...action.payload} };
+    case 'SET_TEAM':
+      return { ...state, team:{...state.team, ...action.payload} };
     case 'SET_ERROR':
       return { ...state, error: action.payload };
     case 'RESET':
@@ -39,9 +39,9 @@ const LoginTeam = () => {
     dispatch({ type: 'SET_SHOW_PASSWORD', payload: !state.showPassword });
   };
 
-  //Update the state with the user data when the user types
+  //Update the state with the team data when the team types
   const handleChange = (e) => {
-    dispatch({ type: 'SET_USER', payload: { [e.target.name]: e.target.value } });
+    dispatch({ type: 'SET_TEAM', payload: { [e.target.name]: e.target.value } });
   };
 
   //Process the errors after the call http
@@ -56,18 +56,19 @@ const LoginTeam = () => {
   const handleLogin = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post('http://localhost:3000/loginTeam', state.user);
+      const response = await axios.post('http://localhost:3000/loginTeam', state.team);
+      console.log(response.data.team)
       dispatch({ type: 'RESET' });
-      history.push('/');
+      history.push('/team');
     } catch (error) {
       dispatch({ type: 'SET_ERROR', payload: handleErrorResponse(error) });
     }
   };
 
-  //Disable the button if the user or password are empty
+  //Disable the button if the team or password are empty
   const disabled = useMemo(() => {
-    return !state.user.email.trim() || !state.user.password.trim();
-  }, [state.user.email, state.user.password]);
+    return !state.team.email.trim() || !state.team.password.trim();
+  }, [state.team.email, state.team.password]);
 
   useEffect(() => {
     if (state.error) {
@@ -79,7 +80,7 @@ const LoginTeam = () => {
   // render the login form with the state and the actions
   return (
     <>
-      <Navbar  currentPage="home" />
+      <Navbar  currentPage="" />
       <div className='container'>
         <form className='form-login' onSubmit={handleLogin}>
           {state.error && <div className='error'>{state.error}</div>}
@@ -91,7 +92,7 @@ const LoginTeam = () => {
               type='email'
               id='email'
               name='email'
-              value={state.user.email}
+              value={state.team.email}
               onChange={handleChange}
               required
             />
@@ -102,7 +103,7 @@ const LoginTeam = () => {
               type={state.showPassword ? 'text' : 'password'}
               id='password'
               name='password'
-              value={state.user.password}
+              value={state.team.password}
               onChange={handleChange}
               required
             />

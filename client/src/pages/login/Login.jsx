@@ -59,7 +59,7 @@ const Login = () => {
     try {
       const response = await axios.post('http://localhost:3000/login', state.user);
       localStorage.setItem('userId', response.data.user.id);
-      console.log(response.data.user.id)
+      console.log(response.data)
       dispatch({ type: 'RESET' });
       history.push('/home');
     } catch (error) {
@@ -82,7 +82,7 @@ const Login = () => {
   // render the login form with the state and the actions
   return (
     <>
-      <Navbar isSignUpVisible={true} currentPage="home" />
+      <Navbar isSignUpVisible={true} currentPage="" />
       <div className='container'>
         <form className='form-login' onSubmit={handleLogin}>
           {state.error && <div className='error'>{state.error}</div>}

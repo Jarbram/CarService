@@ -36,7 +36,7 @@ func NewDatabase() error {
 }
 
 func Migrate() error {
-	err := DB.AutoMigrate(&User{}, &Noticias{}, &Car{})
+	err := DB.AutoMigrate(&User{}, &Noticias{}, &Car{}, &Team{}, &Session{})
 	if err != nil {
 		return err
 	}

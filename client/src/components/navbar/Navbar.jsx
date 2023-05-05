@@ -3,16 +3,32 @@ import { Link } from "react-router-dom";
 import { AiFillCar } from "react-icons/ai";
 import "./navbar.css";
 
-const Navbar = ({ isLoginVisible, isSignUpVisible, isHamburgerVisible,isColaboradoresVisible, currentPage}) => {
+const Navbar = ({ isLoginVisible, isSignUpVisible, isLogoutVisible,  isHamburgerVisible,isColaboradoresVisible, currentPage}) => {
   const [showNav, setShowNav] = useState(false);
 
   const handleMenuClick = () => {
     setShowNav(!showNav);
   };
 
+  const handleLogout = async () => {
+    try {
+      const response = await fetch('http://localhost:3000/logout', {
+        method: "POST"
+      });
+      if (response.status === 200) {
+        window.location.href = "/login";
+        return;
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  
+
+
   return (
     <nav>
-      <div className="container-navbar">
+      <div className="container-navbar" >
         <h1>
           <Link className="navbar-title" to={`/${currentPage}`}>
             Jarbram
@@ -33,6 +49,11 @@ const Navbar = ({ isLoginVisible, isSignUpVisible, isHamburgerVisible,isColabora
             <Link to="/signup">
               <button className="btn-signUp">Sign Up</button>
             </Link>
+          )}
+          {(
+            isLogoutVisible && (
+                <button className="btn-logout" onClick={handleLogout}>Logout</button>
+            )
           )}
         </div>
         <ul className={showNav ? "navigation open" : "navigation"}>

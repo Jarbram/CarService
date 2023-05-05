@@ -7,7 +7,10 @@ import CarService from '../../components/carService/CarService'
 const HomeUser = () => {
   return (
     <div>
-      <Navbar isHamburgerVisible ={true} currentPage="home"/>
+      <Navbar 
+      isHamburgerVisible ={true} 
+      isLogoutVisible={true}
+      currentPage="home"/>
       <div className="home-user">
         <h2 className='title-page'>Learn how to care you car ..</h2>
       </div>

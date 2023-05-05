@@ -5,8 +5,9 @@ import LoginTeam from './pages/LoginTeam/LoginTeam.jsx';
 import Home from './/pages/home/Home.jsx';
 import HomeUser from './/pages/homeUser/HomeUser.jsx';
 import HomeTeam from './/pages/homeTeam/HomeTeam.jsx';
-import Post from './/pages/post/Post.jsx';
+import Post from './/pages/post/Post.jsx';import PostUser from './pages/postUser/PostUser.jsx';
 import Page404 from './pages/404/Page404.jsx';
+
 
 
 
@@ -21,6 +22,7 @@ function App() {
       <Route path="/home" component={HomeUser} /> 
       <Route path="/team" component={HomeTeam} />
       <Route path="/noticias/:id*" component={Post}/>
+      <Route path="/users/:id*" component={PostUser}/>
       <Route path='*' component={Page404} />
     </Switch>
     </Router>

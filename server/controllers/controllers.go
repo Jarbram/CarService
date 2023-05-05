@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"myapp/models"
 	"net/http"
 
@@ -37,7 +38,7 @@ func GetAllUsers(c *gin.Context) {
 
 // Controlador para obtener un usuario por ID
 func GetUserByID(c *gin.Context) {
-	var user models.User
+	var user []models.User
 	id := c.Param("id")
 
 	if err := models.DB.First(&user, id).Error; err != nil {
@@ -137,7 +138,15 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"user": user})
+	session, err := models.CreateSession(models.DB, user)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error: Error al crear la sesion": err.Error()})
+		return
+	}
+	c.SetCookie("session_token", session.Token, 3600, "/", "", false, true)
+	fmt.Println(session.Token)
+
+	c.JSON(http.StatusOK, gin.H{"user": user, "session": session})
 }
 
 // Controlador para inicio de sesión de colaboradores
@@ -163,7 +172,41 @@ func LoginTeam(c *gin.Context) {
 		return
 	}
 
+	session, err := models.CreateSessionTeam(models.DB, team)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error: Error al crear la sesion": err.Error()})
+		return
+	}
+	c.SetCookie("session_token", session.Token, 3600, "/", "", false, true)
+
 	c.JSON(http.StatusOK, gin.H{"team": team})
+}
+
+func Logout(c *gin.Context) {
+	// Obtener el token de sesión del cookie
+	sessionToken, err := c.Cookie("session_token")
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "No se encontró el token de sesión"})
+		return
+	}
+
+	// Buscar la sesión correspondiente al token en la base de datos
+	session, err := models.GetSession(models.DB, sessionToken)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "No se encontró la sesión"})
+		return
+	}
+
+	// Eliminar la sesión de la base de datos
+	if err := models.DB.Delete(session).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error al eliminar la sesión"})
+		return
+	}
+
+	// Eliminar el cookie de sesión del navegador
+	c.SetCookie("session_token", "", -1, "/", "", false, true)
+
+	c.JSON(http.StatusOK, gin.H{"message": "Sesión cerrada exitosamente"})
 }
 
 // Controlador para obtener todas las noticias

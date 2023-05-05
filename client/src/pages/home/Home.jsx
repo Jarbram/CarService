@@ -12,6 +12,7 @@ const Home = () => {
       isLoginVisible={true}
       isSignUpVisible={true}
       isColaboradoresVisible={true}
+      currentPage=""
       />
       <div className="home-container">
         <div className="about">

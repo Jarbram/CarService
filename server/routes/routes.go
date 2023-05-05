@@ -14,6 +14,7 @@ func SetupRoutes(router *gin.Engine) {
 	router.POST("/signup", controllers.Signup)
 	router.POST("/login", controllers.Login)
 	router.POST("/loginTeam", controllers.LoginTeam)
+	router.POST("/logout", controllers.Logout)
 
 	router.GET("/noticias", controllers.GetAllNoticias)
 	router.GET("/noticias/:id", controllers.GetNoticiasByID)
