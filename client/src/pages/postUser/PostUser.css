@@ -21,3 +21,16 @@
 .car_card{
     margin-top: 20px;
 }
+
+.car_button{
+    padding: 0.5rem 1.5rem;
+    background-color: var(--color-bg-variant);
+    border: none;
+    border-radius: 50px;
+    color: var(--color-white);
+    cursor: pointer;
+    transition: all 0.3s ease 0s;
+}
+.car_button:hover{
+    background-color: var(--color-light);
+}

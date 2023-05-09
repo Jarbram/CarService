@@ -27,3 +27,37 @@ func GetCarByID(c *gin.Context) {
 
 	c.JSON(200, gin.H{"data": car})
 }
+
+func UpdateCar(c *gin.Context) {
+	var car models.Car
+	id := c.Param("id")
+
+	if err := models.DB.Where("id = ?", id).First(&car).Error; err != nil {
+		c.JSON(404, gin.H{"error": "Car not found"})
+		return
+	}
+
+	var updates struct {
+		Status  string `json:"status"`
+		Comment string `json:"comment"`
+	}
+	if err := c.BindJSON(&updates); err != nil {
+		c.JSON(400, gin.H{"error": err.Error()})
+		return
+	}
+
+	if updates.Status != "" {
+		car.Status = updates.Status
+	}
+
+	if updates.Comment != "" {
+		car.Comment = updates.Comment
+	}
+
+	if err := models.DB.Save(&car).Error; err != nil {
+		c.JSON(400, gin.H{"error": "Cannot update car"})
+		return
+	}
+
+	c.JSON(200, gin.H{"data": car})
+}

@@ -1,6 +1,9 @@
 import React,{useState, useEffect} from 'react'
 import { useParams } from 'react-router-dom'
 import Navbar from '../../components/navbar/Navbar'
+import axios from 'axios';
+
+
 
 import './PostUser.css'
 
@@ -8,6 +11,34 @@ const PostUser = () => {
     const [user, setUser] = useState([]);
     const [car, setCar] = useState([]);
     const {id} = useParams();
+
+    const handleEdit = (carId) => {
+        // Lógica para mostrar el formulario modal de edición
+        const newStatus = prompt('Nuevo estado:');
+        const newComment = prompt('Nuevo comentario:');
+        if (newStatus || newComment) {
+          axios.put(`http://localhost:3000/car/${carId}`, {
+            status: newStatus,
+            comment: newComment
+          }).then(response => {
+            // Actualiza los detalles del automóvil en el estado
+            setCar(prevCar => prevCar.map(car => {
+              if (car.id === carId) {
+                return {
+                  ...car,
+                  status: newStatus || car.status,
+                  comment: newComment || car.comment
+                };
+              } else {
+                return car;
+              }
+            }));
+          }).catch(error => {
+            console.log(error);
+          });
+        }
+      }
+
     const getUser = async () => {
         try{
             const response = await fetch(`http://localhost:3000/users/${id}`);
@@ -71,7 +102,6 @@ const PostUser = () => {
         <div className="car_container">
             {
                 car.map(car => {
-                    const {id, brand,model,year,color,status,comment} = car;
                     return <div key={car.id} className='car_card'>
                     <div className='car_details'>
                       <p className='car_topic'>Brand:</p>
@@ -97,6 +127,7 @@ const PostUser = () => {
                       <p className='car_topic'>comment:</p>
                       <p>{car.comment}</p>
                     </div>
+                    <button className='car_button' onClick={() => handleEdit(car.id)}>Editar</button>
                     </div>
                 })                
             }
