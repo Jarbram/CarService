@@ -61,3 +61,19 @@ func UpdateCar(c *gin.Context) {
 
 	c.JSON(200, gin.H{"data": car})
 }
+
+func CreateCar(c *gin.Context) {
+	var car models.Car
+
+	if err := c.BindJSON(&car); err != nil {
+		c.JSON(400, gin.H{"error": err.Error()})
+		return
+	}
+
+	if err := models.DB.Create(&car).Error; err != nil {
+		c.JSON(400, gin.H{"error": "Cannot create car"})
+		return
+	}
+
+	c.JSON(200, gin.H{"data": car})
+}
