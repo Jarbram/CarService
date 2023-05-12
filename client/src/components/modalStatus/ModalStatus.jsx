@@ -5,6 +5,25 @@ import axios from 'axios'
 const ModalStatus = ({ carId, onClose, onUpdate }) => {
     const [status, setStatus] = useState('');
     const [comment, setComment] = useState('');
+
+    const Process =[
+      {
+        id: 1,
+        name: 'En cola para atención, muy pronto será atendido'
+      },
+      {
+        id: 2,
+        name: 'En servicio, trabajando en el vehículo'
+      },
+      {
+        id: 3,
+        name: 'Servicio finalizado, listo para entrega'
+      },
+      {
+        id: 4,
+        name: 'Entregado'
+      }
+    ]
   
     const handleSubmit = async (event) => {
       event.preventDefault();
@@ -30,16 +49,29 @@ const ModalStatus = ({ carId, onClose, onUpdate }) => {
           <form onSubmit={handleSubmit}>
             <div className="form-group">
               <label htmlFor="status">Estado:</label>
-              <input
-                type="text"
+                <select
+                className='option'
                 id="status"
                 value={status}
                 onChange={(event) => setStatus(event.target.value)}
-              />
+                >
+                  <option 
+                  value=""
+                  disabled
+                  defaultValue=""
+                  hidden
+                  >Seleccione un estado</option>
+                {
+                  Process.map((process) => { 
+                    return <option key={process.id} value={process.name}>{process.name}</option>
+                  },this)}
+                </select>
+
             </div>
             <div className="form-group">
               <label htmlFor="comment">Comentario:</label>
-              <textarea
+              <input
+                className='textarea'
                 id="comment"
                 value={comment}
                 onChange={(event) => setComment(event.target.value)}
