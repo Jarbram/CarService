@@ -3,11 +3,13 @@ import { useParams } from 'react-router-dom'
 import Navbar from '../../components/navbar/Navbar'
 import ModalStatus from '../../components/modalStatus/ModalStatus'
 import './PostUser.css'
+import CreateCarModal from '../../components/createCarModal/CreateCarModal'
 
 const PostUser = () => {
     const [user, setUser] = useState([]);
     const [car, setCar] = useState([]);
     const [showModal, setShowModal] = useState(false);
+    const [showModalCreate, setShowModalCreate] = useState(false);
     const [selectedCar, setSelectedCar] = useState(null);
     const {id} = useParams();
 
@@ -15,9 +17,15 @@ const PostUser = () => {
       setSelectedCar(car);
       setShowModal(true);
     };
-  
     const handleCloseModal = () => {
       setShowModal(false);
+    };
+
+    const handleCreate = () => {
+      setShowModalCreate(true);
+    };
+    const handleCloseModalCreate = () => {
+      setShowModalCreate(false);
     };
 
     const getUser = async () => {
@@ -122,7 +130,16 @@ const PostUser = () => {
                 })                
             }
         </div>
-
+        <button className='car_button' onClick={() => handleCreate()}>Crear Auto Nuevo</button>
+        {
+          showModalCreate && (
+            <CreateCarModal 
+            userID={id}
+            onClose={handleCloseModalCreate}
+            onUpdate={getCar}
+            />
+          )
+        }
     </div>
     </div>
   )

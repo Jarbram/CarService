@@ -21,7 +21,7 @@ func SetupRoutes(router *gin.Engine) {
 
 	router.GET("/cars", controllers.GetAllCars)
 	router.GET("/car/:id", controllers.GetCarByID)
-	router.POST("/cars", controllers.CreateCar)
+	router.POST("/car", controllers.CreateCar)
 	router.PUT("/car/:id", controllers.UpdateCar)
 
 	router.GET("/users", controllers.GetAllUsers)

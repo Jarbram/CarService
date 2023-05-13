@@ -48,6 +48,15 @@ func UpdateCar(c *gin.Context) {
 
 	if updates.Status != "" {
 		car.Status = updates.Status
+
+		if car.Status == "Entregado" {
+			if err := models.DB.Delete(&car).Error; err != nil {
+				c.JSON(400, gin.H{"error": "Cannot delete car"})
+				return
+			}
+			c.JSON(200, gin.H{"message": "Car deleted successfully"})
+			return
+		}
 	}
 
 	if updates.Comment != "" {

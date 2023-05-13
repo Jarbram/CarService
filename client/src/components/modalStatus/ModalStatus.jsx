@@ -66,7 +66,6 @@ const ModalStatus = ({ carId, onClose, onUpdate }) => {
                     return <option key={process.id} value={process.name}>{process.name}</option>
                   },this)}
                 </select>
-
             </div>
             <div className="form-group">
               <label htmlFor="comment">Comentario:</label>
