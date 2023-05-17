@@ -60,5 +60,17 @@ func UpdateRequest(c *gin.Context) {
 
 }
 func DeleteRequest(c *gin.Context) {
+	var request models.Request
+	id := c.Param("id")
+	if err := models.DB.First(&request, id).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Request not found"})
+		return
+	}
 
+	if err := models.DB.Delete(&request).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete request"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Request deleted successfully"})
 }

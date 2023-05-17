@@ -5,6 +5,7 @@ import axios from 'axios';
 const CarService = () => {
   const [car, setCar] = useState([]);
   const [requestSent, setRequestSent] = useState(false);
+  const [isCarRendered, setCarRendered] = useState(false);
 
   useEffect(() => {
     const userId = localStorage.getItem('userId');
@@ -19,6 +20,9 @@ const CarService = () => {
         .get(`http://localhost:3000/car/${userId}`)
         .then(response => {
           setCar(response.data.data);
+          if (response.data.data.length > 0) {
+            setCarRendered(true);
+          }
         })
         .catch(error => {
           console.log(error);
@@ -26,11 +30,20 @@ const CarService = () => {
     }
   }, []);
 
+  useEffect(() => {
+    if (isCarRendered) {
+      localStorage.removeItem('requestSent');
+    }
+  }, [isCarRendered]);
+
   const handleRequestService = () => {
     if (!requestSent) {
       setRequestSent(true);
       localStorage.setItem('requestSent', 'true');
-      axios.post('http://localhost:3000/requests', { userId: parseInt(localStorage.getItem('userId')) })
+      axios
+        .post('http://localhost:3000/requests', {
+          userId: parseInt(localStorage.getItem('userId'))
+        })
         .then(response => {
           console.log(response);
         })
