@@ -32,18 +32,17 @@ const PostUser = () => {
         try{
             const response = await fetch(`http://localhost:3000/users/${id}`);
             const data = await response.json();
-            setUser(data.data);
-            console.log(data.data);
+            setUser(data.user);
         }catch(err){
             console.log(err);
         }
     }
     const getCar= async () => {
         try{
-            const response = await fetch(`http://localhost:3000/car/${id}`);
+            const response = await fetch(`http://localhost:3000/car/user/${id}`);
             const data = await response.json();
+            console.log(data);
             setCar(data.data);
-            console.log(data.data);
         }catch(err){
             console.log(err);
         }
@@ -59,34 +58,31 @@ const PostUser = () => {
         <Navbar currentPage="team" />
         <div className='car-service'>
         <div className="user-container">
-            {
-                user.map(user => {
-                    const {id, email,first_name,last_name} = user;
-                    return <article>
+                  <article>
                     <div className='user-container-card-div'>
                         <span className='user-container-card-span'> User:
                         </span>
                         <h3>
-                            {first_name}, {last_name}
+                            {user.first_name}, {user.last_name}
                         </h3>
                     </div>
                     <div className='user-container-card-div'>
                         <span className='user-container-card-span'> Email:
                         </span>
                         <p>
-                            {email}
+                            {user.email}
                         </p>
                     </div>
                     <div className='user-container-card-div'>
                         <span className='user-container-card-span'> ID:
                         </span>
                         <p>
-                            {id}
+                            {user.id}
                         </p>   
                     </div>
                     </article>
-                })
-            }
+
+
         </div>
         <div className="car_container">
             {
@@ -120,7 +116,7 @@ const PostUser = () => {
                     {
                       showModal && (
                         <ModalStatus
-                          carId={selectedCar.id}
+                          carId={selectedCar.user_id}
                           onClose={handleCloseModal}
                           onUpdate={getCar}
                         />

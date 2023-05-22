@@ -17,7 +17,7 @@ const CarService = () => {
 
     if (userId) {
       axios
-        .get(`http://localhost:3000/car/${userId}`)
+        .get(`http://localhost:3000/car/user/${userId}`)
         .then(response => {
           setCar(response.data.data);
           if (response.data.data.length > 0) {

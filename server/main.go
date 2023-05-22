@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"myapp/database"
 	"myapp/models"
 	"myapp/routes"
 	"os"
@@ -11,15 +12,16 @@ import (
 
 func main() {
 
-	err := models.NewDatabase()
+	db, err := database.Connect()
 	if err != nil {
 		log.Fatal("Error connecting to database: ", err)
 	}
 
-	err = models.Migrate()
+	err = db.AutoMigrate(&models.User{}, &models.Noticias{}, &models.Car{}, &models.Team{}, &models.Request{})
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("Error migrating database schema: %v", err)
 	}
+
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "3000"
@@ -28,7 +30,7 @@ func main() {
 	router := gin.New()
 	router.Use(gin.Logger())
 
-	routes.SetupRoutes(router)
+	routes.SetupRoutes(router, db)
 
 	router.Run(":" + port)
 

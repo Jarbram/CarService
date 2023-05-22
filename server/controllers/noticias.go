@@ -1,30 +1,45 @@
 package controllers
 
 import (
-	"myapp/models"
+	"net/http"
+	"strconv"
+
+	"myapp/services"
 
 	"github.com/gin-gonic/gin"
 )
 
-func GetAllNoticias(c *gin.Context) {
-	var noticias []models.Noticias
-	if err := models.DB.Find(&noticias).Error; err != nil {
-		c.JSON(500, gin.H{"error": err.Error()})
-		return
-	}
-
-	c.JSON(200, gin.H{"data": noticias})
+type NoticiasController struct {
+	NoticiasService *services.NoticiasService
 }
 
-// Controlador para obtener una noticia por ID
-func GetNoticiasByID(c *gin.Context) {
-	var noticias []models.Noticias
-	id := c.Param("id")
+func NewNoticiasController(noticiasService *services.NoticiasService) *NoticiasController {
+	return &NoticiasController{NoticiasService: noticiasService}
+}
 
-	if err := models.DB.First(&noticias, id).Error; err != nil {
-		c.JSON(404, gin.H{"error": "Noticia no encontrada"})
+func (nc *NoticiasController) GetAllNoticias(c *gin.Context) {
+	noticias, err := nc.NoticiasService.GetAllNoticias()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(200, gin.H{"data": noticias})
+	c.JSON(http.StatusOK, gin.H{"data": noticias})
+}
+
+func (nc *NoticiasController) GetNoticiasByID(c *gin.Context) {
+	idStr := c.Param("id")
+	id, err := strconv.ParseUint(idStr, 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid ID"})
+		return
+	}
+
+	noticias, err := nc.NoticiasService.GetNoticiasByID(uint(id))
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Noticia no encontrada"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"data": noticias})
 }

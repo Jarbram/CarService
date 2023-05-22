@@ -1,88 +1,103 @@
 package controllers
 
 import (
+	"net/http"
+	"strconv"
+
 	"myapp/models"
+	"myapp/services"
 
 	"github.com/gin-gonic/gin"
 )
 
-func GetAllCars(c *gin.Context) {
-	var cars []models.Car
-	if err := models.DB.Find(&cars).Error; err != nil {
-		c.JSON(500, gin.H{"error": err.Error()})
-		return
-	}
-
-	c.JSON(200, gin.H{"data": cars})
+type CarController struct {
+	CarService *services.CarService
 }
 
-func GetCarByID(c *gin.Context) {
-	var car []models.Car
-	id := c.Param("id")
-
-	if err := models.DB.Where("user_id = ?", id).Find(&car).Error; err != nil {
-		c.JSON(404, gin.H{"error": "Car not found"})
-		return
-	}
-
-	c.JSON(200, gin.H{"data": car})
+func NewCarController(carService *services.CarService) *CarController {
+	return &CarController{CarService: carService}
 }
 
-func UpdateCar(c *gin.Context) {
-	var car models.Car
-	id := c.Param("id")
-
-	if err := models.DB.Where("id = ?", id).First(&car).Error; err != nil {
-		c.JSON(404, gin.H{"error": "Car not found"})
+func (cc *CarController) GetAllCars(c *gin.Context) {
+	cars, err := cc.CarService.GetAllCars()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	var updates struct {
-		Status  string `json:"status"`
-		Comment string `json:"comment"`
+	c.JSON(http.StatusOK, gin.H{"data": cars})
+}
+
+func (cc *CarController) GetCarByID(c *gin.Context) {
+	idStr := c.Param("id")
+	id, err := strconv.ParseUint(idStr, 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid ID"})
+		return
 	}
+
+	car, err := cc.CarService.GetCarByID(uint(id))
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Car not found"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"data": car})
+}
+
+func (cc *CarController) GetCarsByUserID(c *gin.Context) {
+	userIDStr := c.Param("id")
+	userID, err := strconv.ParseUint(userIDStr, 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid user ID"})
+		return
+	}
+
+	cars, err := cc.CarService.GetCarsByUserID(uint(userID))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get cars"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"data": cars})
+}
+
+func (cc *CarController) UpdateCar(c *gin.Context) {
+	idStr := c.Param("id")
+	id, err := strconv.ParseUint(idStr, 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid ID"})
+		return
+	}
+
+	var updates models.Car
 	if err := c.BindJSON(&updates); err != nil {
-		c.JSON(400, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	if updates.Status != "" {
-		car.Status = updates.Status
-
-		if car.Status == "Entregado" {
-			if err := models.DB.Delete(&car).Error; err != nil {
-				c.JSON(400, gin.H{"error": "Cannot delete car"})
-				return
-			}
-			c.JSON(200, gin.H{"message": "Car deleted successfully"})
-			return
-		}
-	}
-
-	if updates.Comment != "" {
-		car.Comment = updates.Comment
-	}
-
-	if err := models.DB.Save(&car).Error; err != nil {
-		c.JSON(400, gin.H{"error": "Cannot update car"})
+	err = cc.CarService.UpdateCar(uint(id), &updates)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Car not found"})
 		return
 	}
 
-	c.JSON(200, gin.H{"data": car})
+	c.JSON(http.StatusOK, gin.H{"data": "Car updated successfully"})
 }
 
-func CreateCar(c *gin.Context) {
+func (cc *CarController) CreateCar(c *gin.Context) {
 	var car models.Car
 
 	if err := c.BindJSON(&car); err != nil {
-		c.JSON(400, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	if err := models.DB.Create(&car).Error; err != nil {
-		c.JSON(400, gin.H{"error": "Cannot create car"})
+	err := cc.CarService.CreateCar(&car)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(200, gin.H{"data": car})
+	c.JSON(http.StatusOK, gin.H{"data": car})
 }

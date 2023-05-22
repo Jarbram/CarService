@@ -15,7 +15,7 @@ const ListRequest = () => {
       setRequests(data.requests);
   
       const carPromises = data.requests.map(async (request) => {
-        const carResponse = await fetch(`http://localhost:3000/car/${request.user_id}`);
+        const carResponse = await fetch(`http://localhost:3000/car/user/${request.user_id}`);
         const carData = await carResponse.json();
         return carData.data;
       });

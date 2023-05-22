@@ -1,31 +1,40 @@
 package controllers
 
 import (
-	"myapp/models"
 	"net/http"
+	"strconv"
 	"time"
+
+	"myapp/models"
+	"myapp/services"
 
 	"github.com/gin-gonic/gin"
 )
 
-func CreateRequest(c *gin.Context) {
-	var req struct {
-		UserID uint `json:"userId" `
-	}
+type RequestsController struct {
+	RequestsService *services.RequestsService
+	UserService     *services.UserService
+}
 
+func NewRequestsController(rs *services.RequestsService, us *services.UserService) *RequestsController {
+	return &RequestsController{RequestsService: rs, UserService: us}
+}
+
+func (rc *RequestsController) CreateRequest(c *gin.Context) {
+	var req struct {
+		UserID uint `json:"userId" binding:"required"`
+	}
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	// Obtener los datos del usuario desde la tabla "users"
-	var user models.User
-	if err := models.DB.First(&user, req.UserID).Error; err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
+	user, err := rc.UserService.GetUserByID(req.UserID)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid user ID"})
 		return
 	}
 
-	// Crear una nueva solicitud en la tabla "requests" con los datos del usuario
 	request := models.Request{
 		UserID:    user.ID,
 		FirstName: user.FirstName,
@@ -34,43 +43,56 @@ func CreateRequest(c *gin.Context) {
 		Timestamp: time.Now(),
 	}
 
-	// Guardar la solicitud en la base de datos
-	if err := models.DB.Create(&request).Error; err != nil {
+	if err := rc.RequestsService.CreateRequest(&request); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create request"})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"request": request})
+	c.JSON(http.StatusOK, gin.H{"request": req})
 }
 
-func GetAllRequests(c *gin.Context) {
-	var requests []models.Request
-	if err := models.DB.Find(&requests).Error; err != nil {
+func (rc *RequestsController) GetAllRequests(c *gin.Context) {
+	requests, err := rc.RequestsService.GetAllRequests()
+	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch requests"})
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{"requests": requests})
 }
 
-func GetRequestByID(c *gin.Context) {
+func (rc *RequestsController) GetRequestByID(c *gin.Context) {
+	idStr := c.Param("id")
+	id, err := strconv.ParseUint(idStr, 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request ID"})
+		return
+	}
 
-}
-
-func UpdateRequest(c *gin.Context) {
-
-}
-func DeleteRequest(c *gin.Context) {
-	var request models.Request
-	id := c.Param("id")
-	if err := models.DB.First(&request, id).Error; err != nil {
+	request, err := rc.RequestsService.GetRequestByID(uint(id))
+	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Request not found"})
 		return
 	}
 
-	if err := models.DB.Delete(&request).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete request"})
+	c.JSON(http.StatusOK, gin.H{"data": request})
+}
+
+func (rc *RequestsController) UpdateRequest(c *gin.Context) {
+	// Implementar la lógica para actualizar una solicitud
+}
+
+func (rc *RequestsController) DeleteRequest(c *gin.Context) {
+	reqId := c.Param("id")
+	id, err := strconv.ParseUint(reqId, 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request ID"})
 		return
 	}
 
+	if err := rc.RequestsService.DeleteRequest(uint(id)); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete request"})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{"message": "Request deleted successfully"})
+
 }

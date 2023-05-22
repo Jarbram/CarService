@@ -2,86 +2,106 @@ package controllers
 
 import (
 	"myapp/models"
+	"myapp/services"
+	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"golang.org/x/crypto/bcrypt"
 )
 
+type UserController struct {
+	UserService *services.UserService
+}
+
+func NewUserController(userService *services.UserService) *UserController {
+	return &UserController{UserService: userService}
+}
+
 // Controlador para crear un usuario
-func CreateUser(c *gin.Context) {
+func (uc *UserController) CreateUser(c *gin.Context) {
 	var user models.User
 	if err := c.ShouldBindJSON(&user); err != nil {
-		c.JSON(400, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	if err := models.DB.Create(&user).Error; err != nil {
-		c.JSON(500, gin.H{"error": err.Error()})
-		return
+	err := uc.UserService.CreateUser(&user)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create user"})
 	}
 
-	c.JSON(200, gin.H{"data": user})
+	c.JSON(http.StatusOK, gin.H{"data": user})
 }
 
 // Controlador para obtener todos los usuarios
-func GetAllUsers(c *gin.Context) {
-	var users []models.User
-	if err := models.DB.Find(&users).Error; err != nil {
-		c.JSON(500, gin.H{"error": err.Error()})
+func (uc *UserController) GetAllUsers(c *gin.Context) {
+	users, err := uc.UserService.GetAllUsers()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get users"})
 		return
 	}
 
-	c.JSON(200, gin.H{"data": users})
+	c.JSON(http.StatusOK, gin.H{"users": users})
 }
 
 // Controlador para obtener un usuario por ID
-func GetUserByID(c *gin.Context) {
-	var user []models.User
-	id := c.Param("id")
+func (uc *UserController) GetUserByID(c *gin.Context) {
+	userID := c.Param("id")
 
-	if err := models.DB.First(&user, id).Error; err != nil {
-		c.JSON(404, gin.H{"error": "User not found"})
+	id, err := strconv.ParseUint(userID, 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid user ID"})
 		return
 	}
 
-	c.JSON(200, gin.H{"data": user})
+	user, err := uc.UserService.GetUserByID(uint(id))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get user"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"user": user})
 }
 
 // Controlador para actualizar un usuario por ID
-func UpdateUser(c *gin.Context) {
-	var user models.User
-	id := c.Param("id")
+func (uc *UserController) UpdateUser(c *gin.Context) {
+	// Obtener el ID del usuario de la ruta o de la solicitud
+	userID := c.Param("id")
 
-	if err := models.DB.First(&user, id).Error; err != nil {
-		c.JSON(404, gin.H{"error": "User not found"})
+	var updatedUser models.User
+	if err := c.ShouldBindJSON(&updatedUser); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	if err := c.ShouldBindJSON(&user); err != nil {
-		c.JSON(400, gin.H{"error": err.Error()})
+	id, err := strconv.ParseUint(userID, 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid user ID"})
 		return
 	}
 
-	if err := models.DB.Save(&user).Error; err != nil {
-		c.JSON(500, gin.H{"error": err.Error()})
+	err = uc.UserService.UpdateUser(&updatedUser, uint(id))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update user"})
 		return
 	}
 
-	c.JSON(200, gin.H{"data": user})
+	c.JSON(http.StatusOK, gin.H{"message": "User updated successfully"})
 }
 
 // Controlador para eliminar un usuario por ID
-func DeleteUser(c *gin.Context) {
-	var user models.User
-	id := c.Param("id")
+func (uc *UserController) DeleteUser(c *gin.Context) {
+	userId := c.Param("id")
 
-	if err := models.DB.First(&user, id).Error; err != nil {
-		c.JSON(404, gin.H{"error": "User not found"})
+	id, err := strconv.ParseUint(userId, 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid user ID"})
 		return
 	}
 
-	if err := models.DB.Delete(&user).Error; err != nil {
-		c.JSON(500, gin.H{"error": err.Error()})
+	err = uc.UserService.DeleteUser(uint(id))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete user"})
 		return
 	}
 
@@ -89,26 +109,38 @@ func DeleteUser(c *gin.Context) {
 }
 
 // Controlador para el registro de un nuevo usuario
-func Signup(c *gin.Context) {
+func (uc *UserController) Signup(c *gin.Context) {
 	var user models.User
 	if err := c.ShouldBindJSON(&user); err != nil {
-		c.JSON(400, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	password_bytes := []byte(user.Password)
-	hashed_password, err := bcrypt.GenerateFromPassword(password_bytes, bcrypt.DefaultCost)
+	err := uc.UserService.Signup(&user)
 	if err != nil {
-		c.JSON(500, gin.H{"error": err.Error()})
-		return
-	}
-	user.Password = string(hashed_password)
-
-	// Crear nuevo usuario en la base de datos
-	if err := models.DB.Create(&user).Error; err != nil {
-		c.JSON(500, gin.H{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(200, gin.H{"message": "User registered successfully"})
+	c.JSON(http.StatusOK, gin.H{"message": "User registered successfully"})
+}
+
+func (ac *UserController) Login(c *gin.Context) {
+	var req struct {
+		Email    string `json:"email" binding:"required,email"`
+		Password string `json:"password" binding:"required"`
+	}
+
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	user, err := ac.UserService.Login(req.Email, req.Password)
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Email or password is incorrect. Please try again."})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"user": user})
 }

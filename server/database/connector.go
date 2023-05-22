@@ -1,4 +1,4 @@
-package models
+package database
 
 import (
 	"fmt"
@@ -10,9 +10,7 @@ import (
 	"gorm.io/gorm"
 )
 
-var DB *gorm.DB
-
-func NewDatabase() error {
+func Connect() (*gorm.DB, error) {
 	err := godotenv.Load()
 	if err != nil {
 		log.Fatalf("Error loading .env file: %v", err)
@@ -28,17 +26,8 @@ func NewDatabase() error {
 
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	DB = db
-	return nil
-}
-
-func Migrate() error {
-	err := DB.AutoMigrate(&User{}, &Noticias{}, &Car{}, &Team{}, &Session{}, &Request{})
-	if err != nil {
-		return err
-	}
-	return nil
+	return db, nil
 }
