@@ -76,7 +76,7 @@ const ModalStatus = ({ carId, onClose, onUpdate }) => {
                 onChange={(event) => setComment(event.target.value)}
               />
             </div>
-            <button type="submit">Actualizar</button>
+            <button type="submit">Update</button>
           </form>
         </div>
       </div>

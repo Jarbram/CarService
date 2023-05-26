@@ -84,7 +84,7 @@ const LoginTeam = () => {
       <div className='container'>
         <form className='form-login' onSubmit={handleLogin}>
           {state.error && <div className='error'>{state.error}</div>}
-          <h2 className='title-login'>Bienvenido </h2>
+          <h2 className='title-login'>Welcome </h2>
 
           <label>Email</label>
           <div className='email-container'>
@@ -110,7 +110,7 @@ const LoginTeam = () => {
             <BiShow className='show-password' onClick={handleShowPassword} />
           </div>
           <button  type="submit" className="btn" disabled={disabled}>
-            Iniciar sesión
+            Login
           </button>
         </form>
       </div>

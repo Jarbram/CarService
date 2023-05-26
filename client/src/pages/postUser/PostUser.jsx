@@ -112,7 +112,7 @@ const PostUser = () => {
                       <p className='car_topic'>comment:</p>
                       <p>{car.comment}</p>
                     </div>
-                    <button className='car_button' onClick={() => handleEdit(car)}>Editar</button>
+                    <button className='car_button' onClick={() => handleEdit(car)}>Edit</button>
                     {
                       showModal && (
                         <ModalStatus
@@ -126,7 +126,7 @@ const PostUser = () => {
                 })                
             }
         </div>
-        <button className='car_button' onClick={() => handleCreate()}>Crear Auto Nuevo</button>
+        <button className='car_button' onClick={() => handleCreate()}>Create new car for service</button>
         {
           showModalCreate && (
             <CreateCarModal 

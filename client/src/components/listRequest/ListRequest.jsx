@@ -54,7 +54,7 @@ const ListRequest = () => {
   };
 
   if (!requests || requests.length === 0) {
-    return <div>En espera de clientes</div>;
+    return <div>Waiting for clients</div>;
   }
 
   return (
@@ -80,7 +80,7 @@ const ListRequest = () => {
     <p>{cars[index] ? cars[index].length : 0}</p>
   </div>
             </Link>
-            <button className='delete_button' onClick={() => deleteRequest(request.id,index)}>Eliminar</button>
+            <button className='delete_button' onClick={() => deleteRequest(request.id,index)}>Delete</button>
           </div>
         ))}
       </div>
